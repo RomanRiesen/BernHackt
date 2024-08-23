@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Risk Rally</title>
-    <script src="https://unpkg.com/vue@next"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <style>
       body {
         background-color: white;
@@ -25,7 +25,8 @@
       .fade-leave-active {
         transition: opacity 0.5s;
       }
-      .fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
+      .fade-enter,
+      .fade-leave-to {
         opacity: 0;
       }
       input[type='text'] {
@@ -45,13 +46,22 @@
       button:hover {
         background-color: #0056b3;
       }
+      .results-container {
+        margin-top: 20px;
+        padding: 20px;
+        background-color: #e3f2fd;
+        border: 1px solid #90caf9;
+        width: 60%;
+        text-align: left;
+      }
     </style>
   </head>
   <body>
     <div id="app">
       <h1>Risk Rally</h1>
       <transition name="fade">
-        <div v-if="currentQuestion" class="question-container" :key="currentIndex">
+        <!-- Display Questions -->
+        <div v-if="!completed" class="question-container" :key="currentIndex">
           <p>{{ currentQuestion }}</p>
           <form @submit.prevent="nextQuestion">
             <input type="text" v-model="answer" required />
@@ -59,6 +69,18 @@
           </form>
         </div>
       </transition>
+
+      <!-- Display Results -->
+      <div v-if="completed" class="results-container">
+        <h2>Thank you for completing the questionnaire!</h2>
+        <p>Here are your answers:</p>
+        <ul>
+          <li v-for="(answer, index) in answers" :key="index">
+            <strong>{{ questions[index] }}:</strong> {{ answer }}
+          </li>
+        </ul>
+        <button @click="restart">Restart</button>
+      </div>
     </div>
 
     <script>
@@ -71,7 +93,9 @@
               'What is your risk tolerance on a scale from 1 to 10?'
             ],
             currentIndex: 0,
-            answer: ''
+            answer: '',
+            answers: [],
+            completed: false
           }
         },
         computed: {
@@ -81,13 +105,23 @@
         },
         methods: {
           nextQuestion() {
-            this.answer = '' // Clear the answer
+            // Save the answer to the array
+            this.answers.push(this.answer)
+            this.answer = '' // Clear the input field
+
+            // Move to the next question or finish
             if (this.currentIndex < this.questions.length - 1) {
               this.currentIndex++
             } else {
-              alert('Thank you for completing the questionnaire!')
-              this.currentIndex = 0 // Reset to the first question or handle differently
+              this.completed = true // Mark as completed
             }
+          },
+          restart() {
+            // Reset all data to start over
+            this.currentIndex = 0
+            this.answers = []
+            this.answer = ''
+            this.completed = false
           }
         }
       })
