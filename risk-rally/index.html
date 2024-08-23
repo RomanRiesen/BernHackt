@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Risk Rally</title>
+    <script src="https://unpkg.com/vue@next"></script>
+    <style>
+      body {
+        background-color: white;
+        font-family: Arial, sans-serif;
+        text-align: center;
+        margin: 0;
+        padding: 20px;
+      }
+      .question-container {
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        width: 60%;
+        transition: opacity 0.5s ease-in-out;
+      }
+      .fade-enter-active,
+      .fade-leave-active {
+        transition: opacity 0.5s;
+      }
+      .fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
+        opacity: 0;
+      }
+      input[type='text'] {
+        padding: 10px;
+        margin: 10px 0;
+        width: 80%;
+        font-size: 1em;
+      }
+      button {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        font-size: 1em;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <h1>Risk Rally</h1>
+      <transition name="fade">
+        <div v-if="currentQuestion" class="question-container" :key="currentIndex">
+          <p>{{ currentQuestion }}</p>
+          <form @submit.prevent="nextQuestion">
+            <input type="text" v-model="answer" required />
+            <button type="submit">Next</button>
+          </form>
+        </div>
+      </transition>
+    </div>
+
+    <script>
+      const app = Vue.createApp({
+        data() {
+          return {
+            questions: [
+              'What is your age?',
+              'What is your profession?',
+              'What is your risk tolerance on a scale from 1 to 10?'
+            ],
+            currentIndex: 0,
+            answer: ''
+          }
+        },
+        computed: {
+          currentQuestion() {
+            return this.questions[this.currentIndex] || null
+          }
+        },
+        methods: {
+          nextQuestion() {
+            this.answer = '' // Clear the answer
+            if (this.currentIndex < this.questions.length - 1) {
+              this.currentIndex++
+            } else {
+              alert('Thank you for completing the questionnaire!')
+              this.currentIndex = 0 // Reset to the first question or handle differently
+            }
+          }
+        }
+      })
+
+      app.mount('#app')
+    </script>
+  </body>
+</html>
