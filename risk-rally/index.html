@@ -51,10 +51,11 @@
       </nav>
 
       <!-- Router View -->
-      <router-view></router-view>
+      <router-view/>
     </div>
 
     <script>
+      import TheWelcome from '../views/RiskGameView.vue'
       // Questionnaire Component
       const Questionnaire = {
         template: `
@@ -121,12 +122,7 @@
       // Mini Game Component
       const MiniGame = {
         template: `
-          <div class="game-container">
-            <h1>Mini Game</h1>
-            <p>Try your luck! Press the button to see if you win!</p>
-            <button @click="playGame">Play</button>
-            <p v-if="result">{{ result }}</p>
-          </div>
+        <RiskGameView/>
         `,
         data() {
           return {
