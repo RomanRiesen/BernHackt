@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Risk Rally</title>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/vue-router@4"></script>
     <style>
       body {
         background-color: white;
@@ -13,21 +14,14 @@
         margin: 0;
         padding: 20px;
       }
-      .question-container {
+      .question-container,
+      .game-container {
         margin: 50px auto;
         padding: 20px;
         background-color: #f9f9f9;
         border: 1px solid #ddd;
         width: 60%;
         transition: opacity 0.5s ease-in-out;
-      }
-      .fade-enter-active,
-      .fade-leave-active {
-        transition: opacity 0.5s;
-      }
-      .fade-enter,
-      .fade-leave-to {
-        opacity: 0;
       }
       input[type='text'] {
         padding: 10px;
@@ -46,45 +40,47 @@
       button:hover {
         background-color: #0056b3;
       }
-      .results-container {
-        margin-top: 20px;
-        padding: 20px;
-        background-color: #e3f2fd;
-        border: 1px solid #90caf9;
-        width: 60%;
-        text-align: left;
-      }
     </style>
   </head>
   <body>
     <div id="app">
-      <h1>Risk Rally</h1>
-      <transition name="fade">
-        <!-- Display Questions -->
-        <div v-if="!completed" class="question-container" :key="currentIndex">
-          <p>{{ currentQuestion }}</p>
-          <form @submit.prevent="nextQuestion">
-            <input type="text" v-model="answer" required />
-            <button type="submit">Next</button>
-          </form>
-        </div>
-      </transition>
+      <!-- Navigation -->
+      <nav>
+        <router-link to="/">Questionnaire</router-link> |
+        <router-link to="/game">Mini Game</router-link>
+      </nav>
 
-      <!-- Display Results -->
-      <div v-if="completed" class="results-container">
-        <h2>Thank you for completing the questionnaire!</h2>
-        <p>Here are your answers:</p>
-        <ul>
-          <li v-for="(answer, index) in answers" :key="index">
-            <strong>{{ questions[index] }}:</strong> {{ answer }}
-          </li>
-        </ul>
-        <button @click="restart">Restart</button>
-      </div>
+      <!-- Router View -->
+      <router-view></router-view>
     </div>
 
     <script>
-      const app = Vue.createApp({
+      // Questionnaire Component
+      const Questionnaire = {
+        template: `
+          <div>
+            <h1>Risk Rally</h1>
+            <transition name="fade">
+              <div v-if="!completed" class="question-container" :key="currentIndex">
+                <p>{{ currentQuestion }}</p>
+                <form @submit.prevent="nextQuestion">
+                  <input type="text" v-model="answer" required />
+                  <button type="submit">Next</button>
+                </form>
+              </div>
+            </transition>
+            <div v-if="completed" class="results-container">
+              <h2>Thank you for completing the questionnaire!</h2>
+              <p>Here are your answers:</p>
+              <ul>
+                <li v-for="(answer, index) in answers" :key="index">
+                  <strong>{{ questions[index] }}:</strong> {{ answer }}
+                </li>
+              </ul>
+              <button @click="restart">Restart</button>
+            </div>
+          </div>
+        `,
         data() {
           return {
             questions: [
@@ -105,11 +101,8 @@
         },
         methods: {
           nextQuestion() {
-            // Save the answer to the array
             this.answers.push(this.answer)
-            this.answer = '' // Clear the input field
-
-            // Move to the next question or finish
+            this.answer = '' // Clear input field
             if (this.currentIndex < this.questions.length - 1) {
               this.currentIndex++
             } else {
@@ -117,15 +110,56 @@
             }
           },
           restart() {
-            // Reset all data to start over
             this.currentIndex = 0
             this.answers = []
             this.answer = ''
             this.completed = false
           }
         }
+      }
+
+      // Mini Game Component
+      const MiniGame = {
+        template: `
+          <div class="game-container">
+            <h1>Mini Game</h1>
+            <p>Try your luck! Press the button to see if you win!</p>
+            <button @click="playGame">Play</button>
+            <p v-if="result">{{ result }}</p>
+          </div>
+        `,
+        data() {
+          return {
+            result: ''
+          }
+        },
+        methods: {
+          playGame() {
+            const randomNumber = Math.random()
+            if (randomNumber > 0.5) {
+              this.result = 'You win!'
+            } else {
+              this.result = 'You lose!'
+            }
+          }
+        }
+      }
+
+      // Routes configuration
+      const routes = [
+        { path: '/', component: Questionnaire },
+        { path: '/game', component: MiniGame }
+      ]
+
+      // Create Router
+      const router = VueRouter.createRouter({
+        history: VueRouter.createWebHashHistory(),
+        routes
       })
 
+      // Create Vue App
+      const app = Vue.createApp({})
+      app.use(router)
       app.mount('#app')
     </script>
   </body>
