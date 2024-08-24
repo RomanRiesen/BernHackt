@@ -90,6 +90,9 @@ createEventRelativeValue(insurances.surroundings, "Ein Baum ist in ihrem Garten 
 createEventAbsoluteValue(insurances.top, "Ihre Wände wurden Vandalisiert", 4, 0, 2000, 3000);
 //- Wollen Sie gegen einbrecher geschützt sein? Haben sie viele Verglasungen in ihrem Gebäude?
 createEventAbsoluteValue(insurances.bruch, "Ein Fensterglas wurde von einem Fussball zerstört", 8, 0, 500, 1000);
+
+//Immobilien-Rechtsschutzversicherung:
+//- Wollen sie bei Rechtsstreitigkeiten auf der sicheren Seite sein? Haben sie Nachbaren mit welchen sie Häufig aneinander geraten?
 createEventRelativeValue(insurances.legal, "Ihr Haus wurde umgebaut und sie sehen nach Abschluss Mängel der Arbeit. Die Baufirma streitet ihre Schuld ab und sie kommen in einen Rechtstreit.", 10, 0.5, 15000, 25000);
 
 //Solar
@@ -103,6 +106,18 @@ createEventRelativeValue(insurances.earthquake, `${earthquake_text} verursacht l
 createEventRelativeValue(insurances.earthquake, `${earthquake_text} verursacht stärkere Setzungsrisse.`, 30, 0, 10, 20);
 createEventRelativeValue(insurances.earthquake, `${earthquake_text} Ihr Haus benötigt komplete rennovationen.`, 50, 0, 30, 50);
 
+//Wasserversicherung:
+//- Ist ihr Gebäude an einem Ort wo es mehrheitlich schneit?
+//- Undichte Leitung sind oft schleichende Kosten, finden sie diese für nötig?
+createEventRelativeValue(insurances.water, "Eine undichte Leiung hat ihren Boden als auch einige Möbel durchnässt, die behebung des Lecks macht die Wohnung unbewohnbar.", 15, 2, 10, 20);
+
+//gebäudetechnikversicherung:
+//- besitzen sie ein gebäude mit viel neuartiger technik? (steuerungsmechanismus der storen, Klimaanlage etc)?
+createEventAbsoluteValue(insurances.technic, "Die Steuerung des Storen ist defekt.", 10, 1, 1000, 2000);
+
+
+
+
 /*
 versicherung:
 
@@ -112,6 +127,7 @@ Wasserversicherung
 
 gebäudehaftpflichversicherung (falls keine privatversicherung)
 
+//TODO
 Hausratversicherung
 
 durchschnittlicher schaden hagel: 4865 chf
@@ -134,28 +150,9 @@ Ergänzungsversicherung:
 Bruchversicherung:
 
 
-
-Wasserversicherung:
-
-- Ist ihr Gebäude an einem Ort wo es mehrheitlich schneit?
-
-- Undichte Leitung sind oft schleichende Kosten, finden sie diese für nötig?
-
-- Eine undichte Leiung hat ihren Boden als auch einige Möbel durchnässt, die behebung des Lecks macht die Wohnung unbewohnbar. -10000 
-
-
-gebäudetechnikversicherung:
-
-- besitzen sie ein gebäude mit viel neuartiger technik? (steuerungsmechanismus der storen, Klimaanlage etc)?
-
-- Die Steuerung des Storen ist defekt. - 1000 
-
 Solaranlagenversicherung:
 
 
-Immobilien-Rechtsschutzversicherung:
-
-- Wollen sie bei Rechtsstreitigkeiten auf der sicheren Seite sein? Haben sie Nachbaren mit welchen sie Häufig aneinander geraten?
 
 */
 
