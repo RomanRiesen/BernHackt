@@ -1,11 +1,12 @@
 # RiskGame
 
-BärnHäckt für Challenge Risk-Rally
+BärnHäckt für Challenge Risk-Rallye
 
 ## Description / Idea
 
-A gamified risk assessment tool to discover your own personality risk profile and discover in an interactive whether you need a higher or lower insurance plan for your building / home.
+A gamified risk assessment tool to create your own personal risk profile and discover in an interactive way whether you need a higher or lower insurance plan for your building / home.
 
 ## For development
 
 For development and debugging purposes it is recommended to install [Vue Devtools Addon](https://chromewebstore.google.com/detail/vuejs-devtools-beta/ljjemllljcmogpfapbkkighbhhppjdbg) in your browser.
+For more information on how to setup the development environment, see [risk-rally/README.md](risk-rally/README.md)

@@ -30,7 +30,7 @@ export default {
                 surroundings: { name: 'GVB Plus - Umgebungsversicherung', monthly_premium: 80 },
                 top: { name: 'GVB Top - Ergänzungsversicherung', monthly_premium: 40 },
                 bruch: { name: 'GVB Casco - Bruchversicherung', monthly_premium: 30 },
-                earthquake: { name: 'GVB Terra - Erdbebenversicherung', monthly_premium: 35 },
+                earthquake: { name: 'GVB Terra - Erdbebenversicherung', monthly_premium: 200 },
                 technic: { name: 'GVB Tech - Gebäudetechnikversicherung', monthly_premium: 60 },
                 water: { name: 'GVB Aqua - Wasserversicherung', monthly_premium: 100 },
                 legal: { name: 'GVB Lex – Immobilien-Rechtsschutzversicherung', monthly_premium: 20 },
@@ -46,6 +46,7 @@ export default {
         this.start_month = this.start_date.getMonth()
         this.months = this.start_month;
         this.startGame()
+
         Object.keys(this.insurances).forEach(ins_k => {
             let insurance = this.insurances[ins_k]
             console.log(insurance.name)
@@ -53,10 +54,6 @@ export default {
                 premiums: 0, benefits: 0
             }
         });
-        console.log("SATS", this.insurance_statistics)
-        console.log("SATS", this.insurance_statistics)
-        console.log("SATS", this.insurance_statistics)
-        console.log("SATS", this.insurance_statistics)
         this.createEvents()
     },
     methods: {
@@ -67,6 +64,7 @@ export default {
         },
         stopGame() {
             clearInterval(this.game_loop_interval)
+            this.game_loop_interval = null;
         },
         update() {
             console.log('update')
@@ -87,20 +85,20 @@ export default {
                 this.game_done = true;
             }
 
+            //shuffle because otherwise events further up the list happen more often
             let shuffled_events = this.events
                 .map(value => ({ value, sort: Math.random() }))
                 .sort((a, b) => a.sort - b.sort)
                 .map(({ value }) => value)
 
-            // yes events are not actually independent because only 1 can happen per update steps for ux reasons
+            // events are not actually independent because only 1 can happen per update steps for ux reasons
             let event_index = 0;
             let event_happened = false;
             for (let [i, e] of shuffled_events.entries()) {
 
-                event_happened = e.base_occurence_per_year > Math.random()*100*12 / this.global_probability_multiplier;
+                event_happened = e.base_occurence_per_year > Math.random() * 100 * 12 / this.global_probability_multiplier;
                 console.log("happened", event_happened, e.base_occurence_per_year)
-                if (event_happened)
-                {
+                if (event_happened) {
                     event_index = i;
                     break;
                 }
@@ -110,6 +108,7 @@ export default {
             for (let ins_k of Object.keys(this.insurances)) {
                 let insurance = this.insurances[ins_k];
                 this.insurance_statistics[insurance.name].premiums += insurance.monthly_premium;
+                this.user_state.cash -= insurance.monthly_premium;
             }
 
             if (event_happened) {
@@ -173,9 +172,9 @@ export default {
             // earthquake:
             // - Erdbeben sind in der Schweiz die Naturgefahr mit dem grössten Schadenspotenzial, dennoch sind über 90% der Wohnungen in der Schweiz sind nicht nachweislich erdbebensicher gebaut, stört sie das?
             const earthquake_text = 'Ihr haus ist Teil der 90% der Häuser welche nicht erdbebensicher gebaut sind. Ein erdbeben trifft in Ihrer Region ein und';
-            this.createEventRelativeValue(this.insurances.earthquake, `${earthquake_text} verursacht leichte Setzungsrisse.`, 10, 0, 5, 10);
-            this.createEventRelativeValue(this.insurances.earthquake, `${earthquake_text} verursacht stärkere Setzungsrisse.`, 5, 0, 10, 20);
-            this.createEventRelativeValue(this.insurances.earthquake, `${earthquake_text} Ihr Haus benötigt eine komplette Rennovation.`, 2.5, 0, 30, 50);
+            this.createEventRelativeValue(this.insurances.earthquake, `${earthquake_text} verursacht leichte Setzungsrisse.`, 5, 0, 5, 10);
+            this.createEventRelativeValue(this.insurances.earthquake, `${earthquake_text} verursacht stärkere Setzungsrisse.`, 2.5, 0, 10, 20);
+            this.createEventRelativeValue(this.insurances.earthquake, `${earthquake_text} Ihr Haus benötigt eine komplette Rennovation.`, 1.25, 0, 30, 50);
 
             // Wasserversicherung:
             // - Ist ihr Gebäude an einem Ort wo es mehrheitlich schneit?
@@ -186,42 +185,9 @@ export default {
             // - besitzen sie ein gebäude mit viel neuartiger technik? (steuerungsmechanismus der storen, Klimaanlage etc)?
             this.createEventAbsoluteValue(this.insurances.technic, 'Die Steuerung des Storen ist defekt.', 20, 1, 1000, 2000)
 
-
-
             //Hausratversicherung
             this.createEventAbsoluteValue(this.insurances.hausrat, 'Eine Überschwemmung beschädigt Ihren Kellerinhalt', 8, 0.5, 8000, 12000);
             this.createEventAbsoluteValue(this.insurances.hausrat, 'Ein Sturm beschädigt Ihren Garten stark', 8, 0.5, 2000, 3000);
-
-            /*
-                  versicherung:
-      
-                  Schadenstatistik :
-      
-                  Wasserversicherung
-      
-                  gebäudehaftpflichversicherung (falls keine privatversicherung)
-      
-                  Hausratversicherung
-      
-                  durchschnittlicher schaden hagel: 4865 chf
-      
-                  durchschnittlicher schaden überschwemmung: 10506 chf
-      
-                  durchschnittlicher schaden sturm: 2236 chf
-      
-                  Events (InGame)
-      
-                  Umgebungsversicherung:
-      
-                  - Wie wichtig ist ihnen ihr Garten / ihre Terrasse / ihr grundstück welches nicht direkt ihr Gebäude ist? Verwalten sie dort Wertgegenstände?
-      
-                  Ergänzungsversicherung:
-      
-                  Bruchversicherung:
-      
-                  Solaranlagenversicherung:
-      
-                  */
         },
 
         lerpRound(l, h, f, round) {
@@ -234,17 +200,17 @@ export default {
             const least_amount = 500;
             let damages = least_amount;
             if (event.is_absolute) {
-                damages = this.lerpRound(event.damages_min, event.damages_max, Math.random(), least_amount) 
+                damages = this.lerpRound(event.damages_min, event.damages_max, Math.random(), least_amount)
             } else {
                 let min_dmg = this.user_state.house_value * event.damages_min;
                 let max_dmg = this.user_state.house_value * event.damages_max;
                 console.log("min_dmg", min_dmg, " max_dmg", max_dmg)
-                damages = this.lerpRound(min_dmg, max_dmg, Math.random(), least_amount)/100
+                damages = this.lerpRound(min_dmg, max_dmg, Math.random(), least_amount) / 100
             }
             this.user_state.house_value -= damages;
             return new FiredEvent(event.insurance, event.description, damages)
         },
-        getYearsMonths() { return `${Math.round(this.years)}.${this.months?.toString().padStart(2, "0")}`; }
+        getYearsMonths() { return `${Math.round(this.years)}.${this.months?.toString().padStart(2, "0")}`; },
     },
     beforeUnmount() {
         this.stopGame()
@@ -263,13 +229,13 @@ export default {
                 <div> {{ this.getYearsMonths() }} </div>
             </div>
         </div>
-        <!--<RiskGameEvent v-if="this.current_event !== null" :fired="this.fireEvent(this.current_event, this.user_state)" />-->
         <div id="event_information">
             <div>{{ this.current_event?.description }}</div>
-            <div>{{ this.current_fired_event?.actual_damages}}</div>
+            <div>{{ this.current_fired_event?.actual_damages }}</div>
             <div>{{ this.current_fired_event?.insurance.name }}</div>
-            <button @click="this.startGame">Resume</button>
+            <button v-if="!this.game_done && this.game_loop_interval === null" @click="this.startGame">Resume</button>
         </div>
-        <button v-if="this.game_done" @click="$emit('done')">View Summary</button>
+        <button v-if="this.game_done" @click="$emit('done', { insuranceStats: this.insurance_statistics })">View
+            Summary</button>
     </main>
 </template>

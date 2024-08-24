@@ -1,11 +1,17 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+import { RouterLink, RouterView } from "vue-router";
+import HelloWorld from "./components/HelloWorld.vue";
 </script>
 
 <template>
   <header>
-    <img alt="GVB logo" class="logo" src="@/assets/gvb_logo.svg" width="125" height="125" />
+    <img
+      alt="GVB logo"
+      class="logo"
+      src="@/assets/gvb_logo.svg"
+      width="125"
+      height="125"
+    />
 
     <div class="wrapper">
       <HelloWorld msg="Are you willing to Risk It?" />
@@ -49,13 +55,13 @@ body {
 }
 
 /* Dark Mode */
-@media (prefers-color-scheme: dark) {
+/*@media (prefers-color-scheme: dark) {
   body {
     background-color: #ffffff;
     color: rgb(0, 0, 0);
 
   }
-}
+}*/
 
 .question-container,
 .game-container {
@@ -68,7 +74,7 @@ body {
   transition: opacity 0.5s ease-in-out;
 }
 
-input[type='text'] {
+input[type="text"] {
   padding: 10px;
   margin: 10px center;
   width: 100%;

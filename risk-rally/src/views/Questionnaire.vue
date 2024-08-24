@@ -31,6 +31,18 @@
               </select>
             </template>
 
+            <!-- Template for number input -->
+            <template v-if="currentQuestion.type === 'number'">
+              <input
+                type="number"
+                v-model="answer"
+                @input="validateNumber"
+                placeholder="Eine Zahl grösser als 0"
+                required
+              />
+              <p v-if="numberError" style="color: red">{{ numberError }}</p>
+            </template>
+
             <template v-else-if="currentQuestion.type === 'yesno'">
               <div class="yesno-container">
                 <button
@@ -184,6 +196,7 @@ export default {
       answer: "",
       answers: [],
       completed: false,
+      numberError: "",
     };
   },
   computed: {
@@ -203,6 +216,10 @@ export default {
           this.currentIndex++;
         } else {
           this.completed = true; // Mark as completed
+          this.$router.push({
+            path: "/RiskGame",
+            query: { answers: JSON.stringify(this.answers) },
+          });
         }
       }
     },
@@ -222,7 +239,7 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
+  min-height: 40vh;
   background-color: #f0f4f8;
   padding: 20px;
   font-family: "Arial", sans-serif;
