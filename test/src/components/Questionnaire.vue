@@ -154,6 +154,9 @@ export default {
         {
           text: "Wie risikofreudig sind Sie auf einer Skala von 1 bis 5?",
           type: "select",
+          options: {
+
+          }
         }, // Allgemeine Frage, Überprüfung der Selbsteinschätzung
         {
           text:
