@@ -1,10 +1,10 @@
 # RiskGame
 
-BärnHäckt für Challenge Risk-Rally
+BärnHäckt für Challenge Risk-Rallye
 
 ## Description / Idea
 
-A gamified risk assessment tool to discover your own personality risk profile and discover in an interactive whether you need a higher or lower insurance plan for your building / home.
+A gamified risk assessment tool to create your own personal risk profile and discover in an interactive way whether you need a higher or lower insurance plan for your building / home.
 
 ## For development
 
