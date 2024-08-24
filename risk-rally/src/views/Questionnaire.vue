@@ -239,7 +239,7 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
+  min-height: 40vh;
   background-color: #f0f4f8;
   padding: 20px;
   font-family: "Arial", sans-serif;
