@@ -47,14 +47,12 @@ const events = [
 ]
 
 
-
-
 function createEventAbsoluteValue(insurance, description, occurence_per_year, occurence_increase_per_year, costs_min, costs_max) {
     events.push(
         {
             base_occurence_per_year: occurence_per_year,
             increase_occurence_per_year: occurence_increase_per_year,
-            damages: {"absolute": [costs_min, costs_max]},
+            damages: {absolute: [costs_min, costs_max]},
             insurance: insurance
         }
     )
@@ -65,7 +63,7 @@ function createEventRelativeValue(insurance, description, occurence_per_year, oc
         {
             base_occurence_per_year: occurence_per_year,
             increase_occurence_per_year: occurence_increase_per_year,
-            damages: {"relative": {costs_min_percentage, costs_max_percentage}},
+            damages: {relative: {costs_min_percentage, costs_max_percentage}},
             insurance: insurance
         }
     )
@@ -90,14 +88,12 @@ const insurances = Object.freeze({
 createEventRelativeValue(insurances.surroundings, "Ein Baum ist in ihrem Garten umgestürzt und hat Ihr Gartenhaus beschädigt.", 10, 1, 4000, 9000);
 createEventAbsoluteValue(insurances.top, "Ihre Wände wurden Vandalisiert", 4, 0, 2000, 3000);
 createEventAbsoluteValue(insurances.bruch, "Ein Fensterglas wurde von einem Fussball zerstört", 8, 0, 500, 1000);
-createEventRelativeValue(insurances.legal, "Ihr Haus wurde umgebaut und sie sehen nach Abschluss mängel der Arbeit, Die Baufirma streitet ihre Schuld ab und sie kommen in einen Rechtstreit. Gesamtkosten", 10, 0.5, 15000, 25000);
+createEventRelativeValue(insurances.legal, "Ihr Haus wurde umgebaut und sie sehen nach Abschluss Mängel der Arbeit. Die Baufirma streitet ihre Schuld ab und sie kommen in einen Rechtstreit.", 10, 0.5, 15000, 25000);
+
+
 
 /*
 versicherung:
-
-
-
-
 
 Schadenstatistik :
 
@@ -164,7 +160,6 @@ Immobilien-Rechtsschutzversicherung:
 
 - Wollen sie bei Rechtsstreitigkeiten auf der sicheren Seite sein? Haben sie Nachbaren mit welchen sie Häufig aneinander geraten?
 
-
 */
 
 
@@ -195,7 +190,7 @@ const getYearsMonths = () => {`${Math.round(this.months / 12)}Jahre, ${this.mont
             <div>{{ getWealth }} </div>
         </span>
     </div>
-    <div id = "">
+    <div id = "ingameDate">
         <span>
             <div>Jahre/Monate:</div>
             <div> {{ getYearsMonths }} </div>
