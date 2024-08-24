@@ -233,7 +233,7 @@ export default {
   top: 0;
   left: 0;
   height: 5px;
-  background-color: #007bff;
+  background-color: #FE8E18;
   transition: width 0.3s ease-in-out;
 }
 
@@ -273,12 +273,12 @@ export default {
 
 .answer-input:focus,
 .answer-select:focus {
-  border-color: #007bff;
+  border-color: #FE8E18;
   outline: none;
 }
 
 .next-button {
-  background-color: #007bff;
+  background-color: #DA8A30;
   color: white;
   padding: 15px 30px;
   border: none;
@@ -289,7 +289,7 @@ export default {
 }
 
 .next-button:hover {
-  background-color: #0056b3;
+  background-color: #FE8E18;
 }
 
 .yesno-container {
@@ -299,7 +299,7 @@ export default {
 }
 
 .yesno-button {
-  background-color: #007bff;
+  background-color: #DA8A30;
   color: white;
   padding: 15px 30px;
   border: none;
@@ -310,7 +310,7 @@ export default {
 }
 
 .yesno-button:hover {
-  background-color: #0056b3;
+  background-color: #FE8E18;
 }
 
 .results-section {
@@ -331,7 +331,7 @@ export default {
 }
 
 .restart-button {
-  background-color: #28a745;
+  background-color: #DA8A30;
   color: white;
   padding: 15px 30px;
   border: none;
@@ -342,7 +342,7 @@ export default {
 }
 
 .restart-button:hover {
-  background-color: #218838;
+  background-color: #DA8A30;
 }
 
 .fade-enter-active,
@@ -431,13 +431,13 @@ input[type="text"] {
 }
 button {
   padding: 10px 20px;
-  background-color: #007bff;
+  background-color: #DA8A30;
   color: white;
   border: none;
   font-size: 1em;
   cursor: pointer;
 }
 button:hover {
-  background-color: #0056b3;
+  background-color: #FE8E18;
 }
 </style>

@@ -90,8 +90,9 @@ export default {
 
 <style scoped>
 .game-container {
-  position: relative;
-  width: 100%;
+  position: absolute;
+  width: 23%;
+  left: 740px;
   height: 400px;
   background-color: #87ceeb;
   overflow: hidden;
@@ -115,6 +116,6 @@ export default {
 }
 
 button:hover {
-  background-color: #0056b3;
+  background-color: #FE8E18;
 }
 </style>
