@@ -14,6 +14,7 @@ export default {
             start_year: null,
             years: null, // this.start_date.getYear(),
             months: null, // this.start_date.getMonth(),
+            global_probability_multiplier: 3,
             events: [],
             feelingPossibleAnswersUninsured: [
                 'Ich bin zufrieden mit dem Unversichert sein',
@@ -85,7 +86,7 @@ export default {
             let event_happened = false;
             for (let [i, e] of shuffled_events.entries()) {
 
-                event_happened = e.base_occurence_per_year > Math.random()*100*12;
+                event_happened = e.base_occurence_per_year > Math.random()*100*12 / this.global_probability_multiplier;
                 console.log("happened", event_happened, e.base_occurence_per_year)
                 if (event_happened)
                 {
