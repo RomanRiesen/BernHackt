@@ -31,17 +31,17 @@ export default {
                 'Ich dachte ich wäre versichert'
             ],
             insurances: Object.freeze({
-                solar: { name: 'GVB Solar- & Photovoltaikversicherung', monthly_premium: 50 },
-                feuer_element: { name: 'GVB Natura - Feuer- und Elementarversicherung', monthly_premium: 100 },
-                surroundings: { name: 'GVB Plus - Umgebungsversicherung', monthly_premium: 80 },
-                top: { name: 'GVB Top - Ergänzungsversicherung', monthly_premium: 40 },
-                bruch: { name: 'GVB Casco - Bruchversicherung', monthly_premium: 30 },
-                earthquake: { name: 'GVB Terra - Erdbebenversicherung', monthly_premium: 200 },
-                technic: { name: 'GVB Tech - Gebäudetechnikversicherung', monthly_premium: 60 },
-                water: { name: 'GVB Aqua - Wasserversicherung', monthly_premium: 100 },
-                legal: { name: 'GVB Lex – Immobilien-Rechtsschutzversicherung', monthly_premium: 20 },
-                haftpflicht: { name: 'Gebäudehaftpflichversicherung', monthly_premium: 30 },
-                hausrat: { name: 'Hausratsversicherung', monthly_premium: 65 }
+                solar: { name: 'GVB Solar- & Photovoltaikversicherung', monthly_premium: 50, type: "solar" },
+                feuer_element: { name: 'GVB Natura - Feuer- und Elementarversicherung', monthly_premium: 100, type: "feuer_element" },
+                surroundings: { name: 'GVB Plus - Umgebungsversicherung', monthly_premium: 80, type: "surroundings" },
+                top: { name: 'GVB Top - Ergänzungsversicherung', monthly_premium: 40, type: "top" },
+                bruch: { name: 'GVB Casco - Bruchversicherung', monthly_premium: 30, type: "bruch" },
+                earthquake: { name: 'GVB Terra - Erdbebenversicherung', monthly_premium: 200, type: "earthquake" },
+                technic: { name: 'GVB Tech - Gebäudetechnikversicherung', monthly_premium: 60, type: "technic" },
+                water: { name: 'GVB Aqua - Wasserversicherung', monthly_premium: 100, type: "water" },
+                legal: { name: 'GVB Lex – Immobilien-Rechtsschutzversicherung', monthly_premium: 20, type: "legal" },
+                haftpflicht: { name: 'Gebäudehaftpflichversicherung', monthly_premium: 30, type: "haftpflich" },
+                hausrat: { name: 'Hausratsversicherung', monthly_premium: 65, type: "hausrat" }
             }),
             insurances_paid: questions_and_answers_to_insurances(this.questionnaireAnswers.questions, this.questionnaireAnswers.answers)
         }
@@ -53,10 +53,6 @@ export default {
         this.start_month = this.start_date.getMonth()
         this.months = this.start_month;
         this.startGame()
-        console.log("ins paid", this.insurances_paid);
-        console.log("ins paid", this.questionnaireAnswers);
-        console.log("ins paid", this.insurances_paid);
-        console.log("ins paid", this.questionnaireAnswers);
         console.log("ins paid", this.insurances_paid);
         console.log("ins paid", this.questionnaireAnswers);
 
@@ -110,7 +106,6 @@ export default {
             let event_index = 0;
             let event_happened = false;
             for (let [i, e] of shuffled_events.entries()) {
-
                 event_happened = e.base_occurence_per_year > Math.random() * 100 * 12 / this.global_probability_multiplier;
                 console.log("happened", event_happened, e.base_occurence_per_year)
                 if (event_happened) {
@@ -121,7 +116,8 @@ export default {
 
             //subtract montly premiums
             //FIXME FIXME only subtract/add if actually selected
-            for (let ins_k of Object.keys(this.insurances)) {
+            //for (let ins_k of Object.keys(this.insurances)) {
+            for (let ins_k of this.insurances_paid) {
                 let insurance = this.insurances[ins_k];
                 this.insurance_statistics[insurance.name].premiums += insurance.monthly_premium;
                 this.user_state.cash -= insurance.monthly_premium;
@@ -136,7 +132,10 @@ export default {
                 //TODO figure out if actually covered
                 //TODO figure out if actually covered
                 console.log(this.current_event.insurance)
-                this.insurance_statistics[this.current_event.insurance.name].benefits += this.current_fired_event.actual_damages;
+                if (this.current_event.insurance.type in this.insurances_paid)
+                {
+                    this.insurance_statistics[this.current_event.insurance.name].benefits += this.current_fired_event.actual_damages;
+                }
             }
         },
 
@@ -209,7 +208,6 @@ export default {
         lerpRound(l, h, f, round) {
             return Math.round((l + (h - l) * f) / round) * round
         },
-
         // takes an event and the user_state and returns a FiredEvent
         fireEvent(event) {
             // event happened now calculate damages
@@ -245,9 +243,10 @@ export default {
                 <div> {{ this.getYearsMonths() }} </div>
             </div>
         </div>
-        <div id="event_information">
+        <div v-if="this.current_event" id="event_information">
             <div>{{ this.current_event?.description }}</div>
             <div>{{ this.current_fired_event?.actual_damages }}</div>
+            <div> {{ this.insurances_paid.has(this.current_fired_event?.insurance.type) ? "Von Ihrer Versicherung gedeckt:" : "Nicht von einer Ihrer Versicherungen gedeckt." }}</div>
             <div>{{ this.current_fired_event?.insurance.name }}</div>
             <button v-if="!this.game_done && this.game_loop_interval === null" @click="this.startGame">Resume</button>
         </div>
