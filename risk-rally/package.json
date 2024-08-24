@@ -16,9 +16,11 @@
   "dependencies": {
     "serve": "^14.2.3",
     "vue": "^3.4.29",
-    "vue-router": "^4.3.3"
+    "vue-router": "^4.3.3",
+    "vue-template-compiler": "^2.7.16"
   },
   "devDependencies": {
+    "serve": "^14.2.3",
     "@rushstack/eslint-patch": "^1.8.0",
     "@vitejs/plugin-vue": "^5.0.5",
     "@vue/eslint-config-prettier": "^9.0.0",

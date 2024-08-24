@@ -1,25 +1,38 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
 </script>
 
 <template>
   <header>
     <img alt="GVB logo" class="logo" src="@/assets/gvb_logo.svg" width="125" height="125" />
+    <!---<a href="https://gvb.ch/"> <img style="max-height: 1em; position: absolute; left: 1em; top: 1em;"
+      src="https://gvb.imgix.net/content/dam/gini/logos/gvb_logo.svg.gini-transform/original/gvb_logo.1620214076346.svg/" />
+    </a>-->
+    </header>
 
     <div class="wrapper">
-      <HelloWorld msg="Are you willing to Risk It?" />
+      <RiskGame />
 
-      <nav>
+      <!--<nav>
+      <HelloWorld msg="Are you willing to Risk It?" />
         <RouterLink to="/">Home/Questionnaire</RouterLink>
         <RouterLink to="/game">Mini Game</RouterLink>
         <RouterLink to="/RiskGame">Risk Game</RouterLink>
       </nav>
+      -->
     </div>
-  </header>
-
-  <RouterView />
 </template>
+
+<script>
+import RiskGame from './components/RiskGame.vue'
+
+export default {
+  name: 'App',
+  components: {
+    RiskGame
+  }
+}
+</script>
 
 <style>
 /* Global styles moved from index.html */
