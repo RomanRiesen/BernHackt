@@ -5,14 +5,13 @@ import HelloWorld from './components/HelloWorld.vue'
 
 <template>
   <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
+    <img alt="GVB logo" class="logo" src="@/assets/gvb_logo.svg" width="125" height="125" />
 
     <div class="wrapper">
-      <!--<HelloWorld msg="You did it!" />-->
+      <HelloWorld msg="Are you willing to Risk It?" />
 
       <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
+        <RouterLink to="/">Home/Questionnaire</RouterLink>
         <RouterLink to="/game">Mini Game</RouterLink>
         <RouterLink to="/RiskGame">Risk Game</RouterLink>
       </nav>
@@ -22,66 +21,55 @@ import HelloWorld from './components/HelloWorld.vue'
   <RouterView />
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
+<style>
+/* Global styles moved from index.html */
+body {
+  background-color: white;
+  color: black; /* Add text color */
+  font-family: Arial, sans-serif;
   text-align: center;
-  margin-top: 2rem;
+  margin: 0;
+  padding: 20px;
+  transition:
+    background-color 0.3s,
+    color 0.3s; /* Add smooth transition */
 }
 
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
+/* Dark Mode */
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #121212;
+    color: gray;
   }
+}
 
-  .logo {
-    margin: 0 2rem 0 0;
-  }
+.question-container,
+.game-container {
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  width: 60%;
+  transition: opacity 0.5s ease-in-out;
+}
 
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+input[type='text'] {
+  padding: 10px;
+  margin: 10px 0;
+  width: 80%;
+  font-size: 1em;
+}
 
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
+button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  font-size: 1em;
+  cursor: pointer;
+}
 
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
+button:hover {
+  background-color: #0056b3;
 }
 </style>
