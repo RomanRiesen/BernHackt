@@ -20,7 +20,7 @@ export default {
         return {
             stage: "questionnaire",
             summaryData: null,
-            questionnaire_answers: []
+            questionnaire_answers_and_qs: {questions: [], answers: []}
         }
     },
 }
