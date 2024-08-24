@@ -1,4 +1,5 @@
 <script setup>
+import RiskGame from './components/RiskGame.vue'
 import HelloWorld from './components/HelloWorld.vue'
 </script>
 
@@ -24,7 +25,6 @@ import HelloWorld from './components/HelloWorld.vue'
 </template>
 
 <script>
-import RiskGame from './components/RiskGame.vue'
 
 export default {
   name: 'App',
