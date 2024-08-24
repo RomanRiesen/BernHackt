@@ -67,6 +67,7 @@ export default {
         },
         stopGame() {
             clearInterval(this.game_loop_interval)
+            this.game_loop_interval = null;
         },
         update() {
             console.log('update')
@@ -244,7 +245,7 @@ export default {
             this.user_state.house_value -= damages;
             return new FiredEvent(event.insurance, event.description, damages)
         },
-        getYearsMonths() { return `${Math.round(this.years)}.${this.months?.toString().padStart(2, "0")}`; }
+        getYearsMonths() { return `${Math.round(this.years)}.${this.months?.toString().padStart(2, "0")}`; },
     },
     beforeUnmount() {
         this.stopGame()
@@ -268,8 +269,8 @@ export default {
             <div>{{ this.current_event?.description }}</div>
             <div>{{ this.current_fired_event?.actual_damages}}</div>
             <div>{{ this.current_fired_event?.insurance.name }}</div>
-            <button @click="this.startGame">Resume</button>
+            <button v-if="!this.game_done && this.game_loop_interval === null" @click="this.startGame">Resume</button>
         </div>
-        <button v-if="this.game_done" @click="$emit('done')">View Summary</button>
+        <button v-if="this.game_done" @click="$emit('done', {insuranceStats: this.insurance_statistics})">View Summary</button>
     </main>
 </template>

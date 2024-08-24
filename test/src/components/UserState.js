@@ -21,4 +21,5 @@ class FiredEvent {
   }
 }
 
+
 export { UserState, FiredEvent }

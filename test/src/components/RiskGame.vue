@@ -1,8 +1,8 @@
 
 <template>
     <Questionnaire v-if="stage==='questionnaire'" @done="stage='game'"/>
-    <RiskGameView v-if="stage==='game'" @done="stage='summary'"/>
-    <Summary v-if="stage==='summary'"/>
+    <RiskGameView v-if="stage==='game'" @done="stage='summary'; this.summaryData=$event"/>
+    <Summary v-if="stage==='summary'", :summaryData="this.summaryData"/>
 </template>
 <script>
 import Questionnaire from './Questionnaire.vue'
@@ -18,8 +18,9 @@ export default {
   },
   data () {
     return {
-        stage: "questionnaire"
+        stage: "questionnaire",
+        summaryData: null,
     }
-  }
+  },
 }
 </script>
