@@ -1,14 +1,14 @@
 <template>
-  <RiskGameView/>
+  <RiskGame/>
 </template>
 
 <script>
-import RiskGameView from './components/RiskGameView.vue'
+import RiskGame from './components/RiskGame.vue'
 
 export default {
   name: 'App',
   components: {
-    RiskGameView
+    RiskGame
   }
 }
 </script>

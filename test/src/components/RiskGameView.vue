@@ -14,6 +14,7 @@ export default {
             start_year: null,
             years: null, // this.start_date.getYear(),
             months: null, // this.start_date.getMonth(),
+            game_done: false,
             global_probability_multiplier: 3,
             insurance_statistics: {},
             events: [],
@@ -23,7 +24,6 @@ export default {
                 'Ich habe ein starkes bedauern unversichert gewesen zu sein',
                 'Ich dachte ich wäre versichert'
             ],
-            // TODO add monthly premium
             insurances: Object.freeze({
                 solar: { name: 'GVB Solar- & Photovoltaikversicherung', monthly_premium: 50 },
                 feuer_element: { name: 'GVB Natura - Feuer- und Elementarversicherung', monthly_premium: 100 },
@@ -84,6 +84,7 @@ export default {
                 this.stopGame()
                 console.log(this.insurance_statistics)
                 // TODO end game
+                this.game_done = true;
             }
 
             let shuffled_events = this.events
@@ -115,6 +116,9 @@ export default {
                 this.current_event = this.events[event_index]
                 this.current_fired_event = this.fireEvent(this.current_event, this.user_state);
                 this.stopGame();
+                //TODO figure out if actually covered
+                //TODO figure out if actually covered
+                //TODO figure out if actually covered
                 //TODO figure out if actually covered
                 console.log(this.current_event.insurance)
                 this.insurance_statistics[this.current_event.insurance.name].benefits += this.current_fired_event.actual_damages;
@@ -197,7 +201,6 @@ export default {
       
                   gebäudehaftpflichversicherung (falls keine privatversicherung)
       
-                  //TODO
                   Hausratversicherung
       
                   durchschnittlicher schaden hagel: 4865 chf
@@ -267,5 +270,6 @@ export default {
             <div>{{ this.current_fired_event?.insurance.name }}</div>
             <button @click="this.startGame">Resume</button>
         </div>
+        <button v-if="this.game_done" @click="$emit('done')">View Summary</button>
     </main>
 </template>
