@@ -71,18 +71,19 @@ function createEventRelativeValue(insurance, description, occurence_per_year, oc
 }
 
 
+//TODO add monthly premium
 const insurances = Object.freeze({
-    solar: "GVB Solar- & Photovoltaikversicherung",
-    feuer_element: "GVB Natura - Feuer- und Elementarversicherung",
-    surroundings: "GVB Plus - Umgebungsversicherung",
-    top: "GVB Top - Ergänzungsversicherung",
-    bruch: "GVB Casco - Bruchversicherung",
-    earthquake: "GVB Terra - Erdbebenversicherung",
-    technic: "GVB Tech - Gebäudetechnikversicherung",
-    water: "GVB Aqua - Wasserversicherung",
-    legal: "GVB Lex – Immobilien-Rechtsschutzversicherung",
-    haftpflicht: "Gebäudehaftpflichversicherung",
-    hausrat: "Hausratsversicherung",
+    solar: {name: "GVB Solar- & Photovoltaikversicherung", monthly_premium: 50},
+    feuer_element: {name: "GVB Natura - Feuer- und Elementarversicherung", monthly_premium: 100},
+    surroundings: {name: "GVB Plus - Umgebungsversicherung", monthly_premium: 80},
+    top: {name: "GVB Top - Ergänzungsversicherung", monthly_premium: 40},
+    bruch: {name: "GVB Casco - Bruchversicherung", monthly_premium: 30},
+    earthquake: {name: "GVB Terra - Erdbebenversicherung", monthly_premium: 35},
+    technic: {name: "GVB Tech - Gebäudetechnikversicherung", monthly_premium: 60},
+    water: {name: "GVB Aqua - Wasserversicherung", monthly_premium: 100},
+    legal: {name: "GVB Lex – Immobilien-Rechtsschutzversicherung", monthly_premium: 20},
+    haftpflicht: {name: "Gebäudehaftpflichversicherung", monthly_premium: 30},
+    hausrat: {name: "Hausratsversicherung", monthly_premium: 65},
 })
 
 
@@ -182,7 +183,7 @@ function fireEvent(event, user_state) {
     const least_amount = 500;
     let damages = 0;
     if ("absolute" in event.damages.keys()) {
-        damages = lerpRound(damages.costs_min, damages.costs_max, Math.random(), least_amount);
+        damages = lerpRound(damages.costs_min, damages.costs_max, Math.random(), least_amount) * user_state.house_value();
     }
     else {
         damages = lerpRound(damages.costs_min_percentage, damages.costs_max_percentage, Math.random(), least_amount);
