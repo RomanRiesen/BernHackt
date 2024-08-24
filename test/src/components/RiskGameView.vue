@@ -49,6 +49,7 @@ export default {
     methods: {
         startGame() {
             this.current_event = null;
+            this.current_fired_event = null;
             this.game_loop_interval = setInterval(this.update, this.tick_time)
         },
         stopGame() {
@@ -57,20 +58,65 @@ export default {
         update() {
             console.log('update')
             this.months++;
-            if (this.months === 13) {this.months = 1; this.years++;}
+            if (this.months === 13) {
+                this.months = 1;
+                this.years++;
+                this.events.forEach(e => {
+                    //is it quite ugly to change "base" occurence here? yes. Would renaming help? yes.
+                    e.base_occurence_per_year += e.increase_occurence_per_year;
+                    console.log("ebaseocc", e.base_occurence_per_year, e.increase_occurence_per_year)
+                });
+            }
             if (this.years - this.start_year > 20) {
                 this.stopGame()
                 // TODO end game
             }
 
-            const event_index = Math.floor(Math.random()*this.events.length)
+
             //FIXME for testing only
-            if (Math.random() < 0.5) {
+
+            let shuffled_events = this.events
+                .map(value => ({ value, sort: Math.random() }))
+                .sort((a, b) => a.sort - b.sort)
+                .map(({ value }) => value)
+
+            // yes events are not actually independent because only 1 can happen per update steps for ux reasons
+            let event_index = 0;
+            let event_happened = false;
+            for (let [i, e] of shuffled_events.entries()) {
+
+                event_happened = e.base_occurence_per_year > Math.random()*100*12;
+                console.log("happened", event_happened, e.base_occurence_per_year)
+                if (event_happened)
+                {
+                    event_index = i;
+                    break;
+                }
+            }
+
+            if (event_happened) {
                 this.current_event = this.events[event_index]
-                this.fireEvent(this.current_event, this.user_state);
+                this.current_fired_event = this.fireEvent(this.current_event, this.user_state);
                 this.stopGame();
             }
-            console.log("userstatewealth", this.user_state.get_wealth())
+
+            // select and event to happen
+            //let years_passed = this.years - this.start_year;
+            //let total_probs = 0;
+            //for (const e of this.events) {
+            //    total_probs += e.base_occurence_per_year
+            //}
+
+            //let critical_value = total_probs * Math.random();
+            //let running_sum = 0;
+            //let i, e;
+            //for ([i, e] of this.events.entries()) {
+            //    if (running_sum > critical_value) {
+            //        break
+            //    }
+            //    running_sum += e.base_occurence_per_year;
+            //}
+
         },
 
         // TODO add actual probabilities, maybe add seperate garden damages back, (even more kinds of damages)
@@ -104,11 +150,11 @@ export default {
         },
 
         createEvents() {
-            this.createEventRelativeValue(this.insurances.surroundings, 'Ein Baum ist in ihrem Garten umgestürzt und hat Ihr Gartenhaus beschädigt.', 10, 1, 4000, 9000)
+            this.createEventAbsoluteValue(this.insurances.surroundings, 'Ein Baum ist in ihrem Garten umgestürzt und hat Ihr Gartenhaus beschädigt.', 10, 1, 4000, 9000)
             // - Besitzen sie ein altes Gebäude? besteht bei ihnen erhöhte gefahr vor vandalismus / insekten oder anderen Wildtiere?
-            this.createEventAbsoluteValue(this.insurances.top, 'Ihre Wände wurden Vandalisiert', 4, 0, 2000, 3000)
+            this.createEventAbsoluteValue(this.insurances.top, 'Ihre Wände wurden Vandalisiert', 45, 0, 2000, 3000)
             // - Wollen Sie gegen einbrecher geschützt sein? Haben sie viele Verglasungen in ihrem Gebäude?
-            this.createEventAbsoluteValue(this.insurances.bruch, 'Ein Fensterglas wurde von einem Fussball zerstört', 8, 0, 500, 1000)
+            this.createEventAbsoluteValue(this.insurances.bruch, 'Ein Fensterglas wurde von einem Fussball zerstört', 20, 0, 500, 1000)
 
             // Immobilien-Rechtsschutzversicherung:
             // - Wollen sie bei Rechtsstreitigkeiten auf der sicheren Seite sein? Haben sie Nachbaren mit welchen sie Häufig aneinander geraten?
@@ -120,19 +166,19 @@ export default {
 
             // earthquake:
             // - Erdbeben sind in der Schweiz die Naturgefahr mit dem grössten Schadenspotenzial, dennoch sind über 90% der Wohnungen in der Schweiz sind nicht nachweislich erdbebensicher gebaut, stört sie das?
-            const earthquake_text = 'Ihr haus ist Teil der 90% der häuser welche nicht erdbebensicher gebaut sind. Ein erdbeben trifft in Ihrer Region ein und'
-            this.createEventRelativeValue(this.insurances.earthquake, `${earthquake_text} verursacht leichte Setzungsrisse.`, 20, 0, 5, 10)
-            this.createEventRelativeValue(this.insurances.earthquake, `${earthquake_text} verursacht stärkere Setzungsrisse.`, 30, 0, 10, 20)
-            this.createEventRelativeValue(this.insurances.earthquake, `${earthquake_text} Ihr Haus benötigt komplete rennovationen.`, 50, 0, 30, 50)
+            const earthquake_text = 'Ihr haus ist Teil der 90% der häuser welche nicht erdbebensicher gebaut sind. Ein erdbeben trifft in Ihrer Region ein und';
+            this.createEventRelativeValue(this.insurances.earthquake, `${earthquake_text} verursacht leichte Setzungsrisse.`, 10, 0, 5, 10);
+            this.createEventRelativeValue(this.insurances.earthquake, `${earthquake_text} verursacht stärkere Setzungsrisse.`, 5, 0, 10, 20);
+            this.createEventRelativeValue(this.insurances.earthquake, `${earthquake_text} Ihr Haus benötigt eine komplette Rennovation.`, 2.5, 0, 30, 50);
 
             // Wasserversicherung:
             // - Ist ihr Gebäude an einem Ort wo es mehrheitlich schneit?
             // - Undichte Leitung sind oft schleichende Kosten, finden sie diese für nötig?
-            this.createEventRelativeValue(this.insurances.water, 'Eine undichte Leiung hat ihren Boden als auch einige Möbel durchnässt, die behebung des Lecks macht die Wohnung unbewohnbar.', 15, 2, 10, 20)
+            this.createEventRelativeValue(this.insurances.water, 'Eine undichte Leiung hat ihren Boden als auch einige Möbel durchnässt, die behebung des Lecks macht die Wohnung unbewohnbar.', 10, 2, 10, 20)
 
             // gebäudetechnikversicherung:
             // - besitzen sie ein gebäude mit viel neuartiger technik? (steuerungsmechanismus der storen, Klimaanlage etc)?
-            this.createEventAbsoluteValue(this.insurances.technic, 'Die Steuerung des Storen ist defekt.', 10, 1, 1000, 2000)
+            this.createEventAbsoluteValue(this.insurances.technic, 'Die Steuerung des Storen ist defekt.', 20, 1, 1000, 2000)
 
             /*
                   versicherung:
@@ -175,11 +221,14 @@ export default {
         fireEvent(event, user_state) {
             // event happened now calculate damages
             const least_amount = 500
-            let damages = 0
+            let damages = least_amount;
             if (event.is_absolute) {
                 damages = this.lerpRound(event.damages_min, event.damages_max, Math.random(), least_amount) 
             } else {
-                damages = this.lerpRound(event.damages_min, event.damages_max, Math.random(), least_amount)/100 * user_state.house_value
+                let min_dmg = this.user_state.house_value * event.damages_min;
+                let max_dmg = this.user_state.house_value * event.damages_max;
+                console.log("min_dmg", min_dmg, " max_dmg", max_dmg)
+                damages = this.lerpRound(min_dmg, max_dmg, Math.random(), least_amount)/100
             }
             this.user_state.house_value -= damages;
             return new FiredEvent(event.insurance, event.description, damages)
@@ -206,6 +255,8 @@ export default {
         <!--<RiskGameEvent v-if="this.current_event !== null" :fired="this.fireEvent(this.current_event, this.user_state)" />-->
         <div id="event_information">
             <div>{{ this.current_event?.description }}</div>
+            <div>{{ this.current_fired_event?.actual_damages}}</div>
+            <div>{{ this.current_fired_event?.insurance.name }}</div>
             <button @click="this.startGame">Resume</button>
         </div>
     </main>
