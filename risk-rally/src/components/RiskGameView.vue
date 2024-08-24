@@ -1,6 +1,6 @@
 <script>
 import RiskGameEvent from './RiskGameEvent.vue'
-import { UserState, FiredEvent } from './UserState.js'
+import { UserState, FiredEvent, questions_and_answers_to_insurances } from './UserState.js'
 
 export default {
     props: {
@@ -43,7 +43,7 @@ export default {
                 haftpflicht: { name: 'Gebäudehaftpflichversicherung', monthly_premium: 30 },
                 hausrat: { name: 'Hausratsversicherung', monthly_premium: 65 }
             }),
-            insurances_paid: this.questionnaireAnswers.map((a) => {return a.insurance}).filter((a) => {return a != undefined})
+            insurances_paid: questions_and_answers_to_insurances(this.questionnaireAnswers.questions, this.questionnaireAnswers.answers)
         }
     },
     mounted() {

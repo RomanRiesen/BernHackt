@@ -22,4 +22,15 @@ class FiredEvent {
 }
 
 
-export { UserState, FiredEvent }
+function questions_and_answers_to_insurances(questions, answers) {
+  //let insurance_questions = questions.filter((q)=>{return q.insurance != undefined;})
+  let insurances_paid = []
+  for (let [i, q] of questions.entries()) {
+    if (q.insurance && answers[i] == "Yes") {
+      insurances_paid.push(q.insurance)
+    }
+  }
+  return new Set(insurances_paid);
+}
+
+export { UserState, FiredEvent, questions_and_answers_to_insurances }
