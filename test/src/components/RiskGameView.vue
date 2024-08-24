@@ -10,11 +10,12 @@ export default {
             game_loop_interval: null,
             user_state: new UserState(100000, 900000, 1100000),
             start_date: null,
-            tick_time: 1000, // nr milliseconds
+            tick_time: 100, // nr milliseconds
             start_year: null,
             years: null, // this.start_date.getYear(),
             months: null, // this.start_date.getMonth(),
             global_probability_multiplier: 3,
+            insurance_statistics: {},
             events: [],
             feelingPossibleAnswersUninsured: [
                 'Ich bin zufrieden mit dem Unversichert sein',
@@ -45,6 +46,17 @@ export default {
         this.start_month = this.start_date.getMonth()
         this.months = this.start_month;
         this.startGame()
+        Object.keys(this.insurances).forEach(ins_k => {
+            let insurance = this.insurances[ins_k]
+            console.log(insurance.name)
+            this.insurance_statistics[insurance.name] = {
+                premiums: 0, benefits: 0
+            }
+        });
+        console.log("SATS", this.insurance_statistics)
+        console.log("SATS", this.insurance_statistics)
+        console.log("SATS", this.insurance_statistics)
+        console.log("SATS", this.insurance_statistics)
         this.createEvents()
     },
     methods: {
@@ -68,13 +80,11 @@ export default {
                     console.log("ebaseocc", e.base_occurence_per_year, e.increase_occurence_per_year)
                 });
             }
-            if (this.years - this.start_year > 20) {
+            if (this.years - this.start_year > 2) {
                 this.stopGame()
+                console.log(this.insurance_statistics)
                 // TODO end game
             }
-
-
-            //FIXME for testing only
 
             let shuffled_events = this.events
                 .map(value => ({ value, sort: Math.random() }))
@@ -95,32 +105,22 @@ export default {
                 }
             }
 
+
+            for (let ins_k of Object.keys(this.insurances)) {
+                let insurance = this.insurances[ins_k];
+                this.insurance_statistics[insurance.name].premiums += insurance.monthly_premium;
+            }
+
             if (event_happened) {
                 this.current_event = this.events[event_index]
                 this.current_fired_event = this.fireEvent(this.current_event, this.user_state);
                 this.stopGame();
+                //TODO figure out if actually covered
+                console.log(this.current_event.insurance)
+                this.insurance_statistics[this.current_event.insurance.name].benefits += this.current_fired_event.actual_damages;
             }
-
-            // select and event to happen
-            //let years_passed = this.years - this.start_year;
-            //let total_probs = 0;
-            //for (const e of this.events) {
-            //    total_probs += e.base_occurence_per_year
-            //}
-
-            //let critical_value = total_probs * Math.random();
-            //let running_sum = 0;
-            //let i, e;
-            //for ([i, e] of this.events.entries()) {
-            //    if (running_sum > critical_value) {
-            //        break
-            //    }
-            //    running_sum += e.base_occurence_per_year;
-            //}
-
         },
 
-        // TODO add actual probabilities, maybe add seperate garden damages back, (even more kinds of damages)
         createEventAbsoluteValue(insurance, description, occurence_per_year, occurence_increase_per_year, costs_min, costs_max) {
             this.events.push(
                 {
@@ -152,6 +152,7 @@ export default {
 
         createEvents() {
             this.createEventAbsoluteValue(this.insurances.surroundings, 'Ein Baum ist in ihrem Garten umgestürzt und hat Ihr Gartenhaus beschädigt.', 10, 1, 4000, 9000)
+            this.createEventAbsoluteValue(this.insurances.surroundings, 'Ein Hagelsturm beschädigt Ihr Gewächshaus', 10, 0.1, 3000, 5000);
             // - Besitzen sie ein altes Gebäude? besteht bei ihnen erhöhte gefahr vor vandalismus / insekten oder anderen Wildtiere?
             this.createEventAbsoluteValue(this.insurances.top, 'Ihre Wände wurden Vandalisiert', 45, 0, 2000, 3000)
             // - Wollen Sie gegen einbrecher geschützt sein? Haben sie viele Verglasungen in ihrem Gebäude?
@@ -167,7 +168,7 @@ export default {
 
             // earthquake:
             // - Erdbeben sind in der Schweiz die Naturgefahr mit dem grössten Schadenspotenzial, dennoch sind über 90% der Wohnungen in der Schweiz sind nicht nachweislich erdbebensicher gebaut, stört sie das?
-            const earthquake_text = 'Ihr haus ist Teil der 90% der häuser welche nicht erdbebensicher gebaut sind. Ein erdbeben trifft in Ihrer Region ein und';
+            const earthquake_text = 'Ihr haus ist Teil der 90% der Häuser welche nicht erdbebensicher gebaut sind. Ein erdbeben trifft in Ihrer Region ein und';
             this.createEventRelativeValue(this.insurances.earthquake, `${earthquake_text} verursacht leichte Setzungsrisse.`, 10, 0, 5, 10);
             this.createEventRelativeValue(this.insurances.earthquake, `${earthquake_text} verursacht stärkere Setzungsrisse.`, 5, 0, 10, 20);
             this.createEventRelativeValue(this.insurances.earthquake, `${earthquake_text} Ihr Haus benötigt eine komplette Rennovation.`, 2.5, 0, 30, 50);
@@ -180,6 +181,12 @@ export default {
             // gebäudetechnikversicherung:
             // - besitzen sie ein gebäude mit viel neuartiger technik? (steuerungsmechanismus der storen, Klimaanlage etc)?
             this.createEventAbsoluteValue(this.insurances.technic, 'Die Steuerung des Storen ist defekt.', 20, 1, 1000, 2000)
+
+
+
+            //Hausratversicherung
+            this.createEventAbsoluteValue(this.insurances.hausrat, 'Eine Überschwemmung beschädigt Ihren Kellerinhalt', 8, 0.5, 8000, 12000);
+            this.createEventAbsoluteValue(this.insurances.hausrat, 'Ein Sturm beschädigt Ihren Garten stark', 8, 0.5, 2000, 3000);
 
             /*
                   versicherung:
@@ -221,7 +228,7 @@ export default {
         // takes an event and the user_state and returns a FiredEvent
         fireEvent(event, user_state) {
             // event happened now calculate damages
-            const least_amount = 500
+            const least_amount = 500;
             let damages = least_amount;
             if (event.is_absolute) {
                 damages = this.lerpRound(event.damages_min, event.damages_max, Math.random(), least_amount) 
