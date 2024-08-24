@@ -1,8 +1,14 @@
 <script>
-import RiskGameEvent from '../components/RiskGameEvent.vue'
-import { UserState, FiredEvent } from '../components/UserState.js'
+import RiskGameEvent from './RiskGameEvent.vue'
+import { UserState, FiredEvent } from './UserState.js'
 
 export default {
+    props: {
+        questionnaireAnswers: {
+            type: Object,
+            required: true
+        }
+    },
     components: RiskGameEvent,
     data() {
         return {
@@ -36,7 +42,8 @@ export default {
                 legal: { name: 'GVB Lex – Immobilien-Rechtsschutzversicherung', monthly_premium: 20 },
                 haftpflicht: { name: 'Gebäudehaftpflichversicherung', monthly_premium: 30 },
                 hausrat: { name: 'Hausratsversicherung', monthly_premium: 65 }
-            })
+            }),
+            insurances_paid: this.questionnaireAnswers.map((a) => {return a.insurance}).filter((a) => {return a != undefined})
         }
     },
     mounted() {
@@ -68,16 +75,18 @@ export default {
         },
         update() {
             console.log('update')
+
             this.months++;
+
             if (this.months === 13) {
                 this.months = 1;
                 this.years++;
                 this.events.forEach(e => {
                     //is it quite ugly to change "base" occurence here? yes. Would renaming help? yes.
                     e.base_occurence_per_year += e.increase_occurence_per_year;
-                    console.log("ebaseocc", e.base_occurence_per_year, e.increase_occurence_per_year)
                 });
             }
+
             if (this.years - this.start_year > 2) {
                 this.stopGame()
                 console.log(this.insurance_statistics)
@@ -104,7 +113,8 @@ export default {
                 }
             }
 
-
+            //subtract montly premiums
+            //FIXME FIXME only subtract/add if actually selected
             for (let ins_k of Object.keys(this.insurances)) {
                 let insurance = this.insurances[ins_k];
                 this.insurance_statistics[insurance.name].premiums += insurance.monthly_premium;
@@ -195,7 +205,7 @@ export default {
         },
 
         // takes an event and the user_state and returns a FiredEvent
-        fireEvent(event, user_state) {
+        fireEvent(event) {
             // event happened now calculate damages
             const least_amount = 500;
             let damages = least_amount;

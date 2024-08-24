@@ -1,57 +1,57 @@
+<!-- src/views/Questionnaire.vue -->
 <template>
-    <div class="typeform-container">
-        <div class="progress-bar" :style="{ width: progressBarWidth + '%' }"></div>
-        <div class="question-card">
-            <transition name="fade" mode="out-in">
-                <div v-if="!completed" class="question-section" :key="currentIndex">
-                    <p class="question-text">{{ currentQuestion.text }}</p>
-                    <form @submit.prevent="nextQuestion" class="answer-form">
-                        <!-- Render the input based on question type -->
-                        <template v-if="currentQuestion.type === 'text'">
-                            <input type="text" v-model="answer" class="answer-input" placeholder="Your answer..."
-                                required />
-                        </template>
+  <div class="typeform-container">
+    <div class="progress-bar" :style="{ width: progressBarWidth + '%' }"></div>
+    <div class="question-card">
+      <transition name="fade" mode="out-in">
+        <div v-if="!completed" class="question-section" :key="currentIndex">
+          <p class="question-text">{{ currentQuestion.text }}</p>
+          <form @submit.prevent="nextQuestion" class="answer-form">
+            <!-- Render the input based on question type -->
+            <template v-if="currentQuestion.type === 'text'">
+              <input type="text" v-model="answer" class="answer-input" placeholder="Your answer..." required />
+            </template>
 
-                        <template v-else-if="currentQuestion.type === 'select'">
-                            <select v-model="answer" class="answer-select" required>
-                                <option disabled value="">Bitte auswählen</option>
-                                <option v-for="(value, key) in currentQuestion.options" :key="key" :value="value">
-                                    {{ value }}
-                                </option>
-                            </select>
-                        </template>
+            <template v-else-if="currentQuestion.type === 'select'">
+              <select v-model="answer" class="answer-select" required>
+                <option disabled value="">Bitte auswählen</option>
+                <option v-for="(value, key) in currentQuestion.options" :key="key" :value="value">
+                  {{ value }}
+                </option>
+              </select>
+            </template>
 
-                        <template v-else-if="currentQuestion.type === 'yesno'">
-                            <div class="yesno-container">
-                                <button type="button" class="yesno-button" @click="(answer = 'Yes'), nextQuestion()">
-                                    Yes
-                                </button>
-                                <button type="button" class="yesno-button" @click="(answer = 'No'), nextQuestion()">
-                                    No
-                                </button>
-                            </div>
-                        </template>
+            <template v-else-if="currentQuestion.type === 'yesno'">
+              <div class="yesno-container">
+                <button type="button" class="yesno-button" @click="(answer = 'Yes'), nextQuestion()">
+                  Yes
+                </button>
+                <button type="button" class="yesno-button" @click="(answer = 'No'), nextQuestion()">
+                  No
+                </button>
+              </div>
+            </template>
 
-                        <!-- Next button only for text or select inputs -->
-                        <template v-if="currentQuestion.type !== 'yesno'">
-                            <button type="submit" class="next-button">Weiter</button>
-                        </template>
-                    </form>
-                </div>
-            </transition>
-            <div v-if="completed" class="results-section">
-                <h2>Danke für das Ausfüllen des Fragebogens!</h2>
-                <p>Ihre Antworten sind:</p>
-                <ul>
-                    <li v-for="(answer, index) in answers" :key="index">
-                        <strong>{{ questions[index].text }}:</strong> {{ answer }}
-                    </li>
-                </ul>
-                <button @click="restart" class="restart-button">Von Vorne</button>
-            </div>
+            <!-- Next button only for text or select inputs -->
+            <template v-if="currentQuestion.type !== 'yesno'">
+              <button type="submit" class="next-button">Weiter</button>
+            </template>
+          </form>
         </div>
+      </transition>
+      <div v-if="completed" class="results-section">
+        <h2>Danke für das Ausfüllen des Fragebogens!</h2>
+        <p>Ihre Antworten sind:</p>
+        <ul>
+          <li v-for="(answer, index) in answers" :key="index">
+            <strong>{{ questions[index].text }}:</strong> {{ answer }}
+          </li>
+        </ul>
+        <button @click="$emit('done', this.answers)" class="continue-button">Weiter zum Interaktiven Teil</button>
+        <button @click="restart" class="restart-button">Von Vorne</button>
+      </div>
     </div>
-    <button @click="$emit('done')">PLACEHOLDER NEXT</button>
+  </div>
 </template>
 
 <script>
@@ -313,6 +313,15 @@ export default {
   margin-bottom: 10px;
 }
 
+.continue-button {
+  background-color: #ffa745;
+  color: black;
+  padding: 15px 30px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1em;
+}
+
 .restart-button {
   background-color: #28a745;
   color: white;
@@ -406,12 +415,14 @@ export default {
   width: 60%;
   transition: opacity 0.5s ease-in-out;
 }
+
 input[type="text"] {
   padding: 10px;
   margin: 10px 0;
   width: 80%;
   font-size: 1em;
 }
+
 button {
   padding: 10px 20px;
   background-color: #007bff;
@@ -420,6 +431,7 @@ button {
   font-size: 1em;
   cursor: pointer;
 }
+
 button:hover {
   background-color: #0056b3;
 }
