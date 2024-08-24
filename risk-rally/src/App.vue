@@ -29,44 +29,61 @@ import HelloWorld from "./components/HelloWorld.vue";
 
 <style>
 /* Global styles moved from index.html */
+header {
+  position: relative;
+  height: 100vh;
+}
+
+.wrapper {
+  position: absolute;
+  top: 10%; /* Adjust to position the wrapper from the top */
+  left: 50%;
+  transform: translateX(-50%); /* Centers it horizontally */
+  text-align: center;
+}
+
 body {
   background-color: white;
   color: black; /* Add text color */
   font-family: Arial, sans-serif;
   text-align: center;
   margin: 0;
-  padding: 20px;
-  transition: background-color 0.3s, color 0.3s; /* Add smooth transition */
+  padding: center;
+  transition:
+    background-color 0.3s,
+    color 0.3s; /* Add smooth transition */
 }
 
 /* Dark Mode */
 /*@media (prefers-color-scheme: dark) {
   body {
-    background-color: #121212;
-    color: gray;
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
+
   }
 }*/
 
 .question-container,
 .game-container {
-  margin: 50px auto;
-  padding: 20px;
+  position: absolute;
+  margin: 50px center;
+  padding: 20px center;
   background-color: #f9f9f9;
   border: 1px solid #ddd;
-  width: 60%;
+  width: 100%;
   transition: opacity 0.5s ease-in-out;
 }
 
 input[type="text"] {
   padding: 10px;
-  margin: 10px 0;
-  width: 80%;
+  margin: 10px center;
+  width: 100%;
   font-size: 1em;
 }
 
 button {
   padding: 10px 20px;
-  background-color: #007bff;
+  background-color: #FE8E18;
   color: white;
   border: none;
   font-size: 1em;
@@ -74,6 +91,6 @@ button {
 }
 
 button:hover {
-  background-color: #0056b3;
+  background-color: #FE8E18;
 }
 </style>
