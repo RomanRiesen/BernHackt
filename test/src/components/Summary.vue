@@ -4,24 +4,24 @@
     </h2>
     <div style="display: flex; justify-content: center;">
 
-    <table >
-        <thead>
-            <tr>
-                <th style="text-align: left;">Name</th>
-                <th>Prämien</th>
-                <th>Auszahlungen</th>
-                <th>Differenz</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-for="(data, name) in sortedInsuranceData" :key="name">
-                <td style="text-align:left;">{{ name }}</td>
-                <td>{{ formatNumber(data.premiums) }}</td>
-                <td>{{ formatNumber(data.benefits) }}</td>
-                <td>{{ formatNumber(data.benefits - data.premiums) }}</td>
-            </tr>
-        </tbody>
-    </table>
+        <table>
+            <thead>
+                <tr>
+                    <th style="text-align: left;">Name</th>
+                    <th>Prämien</th>
+                    <th>Auszahlungen</th>
+                    <th>Differenz</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(data, name) in sortedInsuranceData" :key="name">
+                    <td style="text-align:left;">{{ name }}</td>
+                    <td>{{ formatNumber(data.premiums) }}</td>
+                    <td>{{ formatNumber(data.benefits) }}</td>
+                    <td>{{ formatNumber(data.benefits - data.premiums) }}</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </template>
 
@@ -44,9 +44,9 @@ export default {
         }
     },
     methods: {
-    formatNumber(num) {
-      return new Intl.NumberFormat().format(num);
+        formatNumber(num) {
+            return new Intl.NumberFormat().format(num);
+        }
     }
-  }
 }
 </script>

@@ -1,5 +1,8 @@
 <template>
-  <RiskGame/>
+  <a href="https://gvb.ch/"> <img style="max-height: 1em; position: absolute; left: 1em; top: 1em;"
+    src="https://gvb.imgix.net/content/dam/gini/logos/gvb_logo.svg.gini-transform/original/gvb_logo.1620214076346.svg/" />
+  </a>
+  <RiskGame />
 </template>
 
 <script>
