@@ -86,11 +86,22 @@ const insurances = Object.freeze({
 
 
 createEventRelativeValue(insurances.surroundings, "Ein Baum ist in ihrem Garten umgestürzt und hat Ihr Gartenhaus beschädigt.", 10, 1, 4000, 9000);
+//- Besitzen sie ein altes Gebäude? besteht bei ihnen erhöhte gefahr vor vandalismus / insekten oder anderen Wildtiere?
 createEventAbsoluteValue(insurances.top, "Ihre Wände wurden Vandalisiert", 4, 0, 2000, 3000);
+//- Wollen Sie gegen einbrecher geschützt sein? Haben sie viele Verglasungen in ihrem Gebäude?
 createEventAbsoluteValue(insurances.bruch, "Ein Fensterglas wurde von einem Fussball zerstört", 8, 0, 500, 1000);
 createEventRelativeValue(insurances.legal, "Ihr Haus wurde umgebaut und sie sehen nach Abschluss Mängel der Arbeit. Die Baufirma streitet ihre Schuld ab und sie kommen in einen Rechtstreit.", 10, 0.5, 15000, 25000);
 
+//Solar
+//- Besitzt ihr Gebäude Solaranlagen und wollen sie 100% versichert auch für ihren entgangenen Strom und folgekosten ?
+createEventAbsoluteValue(insurances.solar, "Nach Hagel wurden ihre Solaranlage erheblich beschädigt und der entgangene Strom und die Folgekosten kommen zu tragen", 10, 0.5, 2000, 3000);
 
+//earthquake:
+//- Erdbeben sind in der Schweiz die Naturgefahr mit dem grössten Schadenspotenzial, dennoch sind über 90% der Wohnungen in der Schweiz sind nicht nachweislich erdbebensicher gebaut, stört sie das?
+const earthquake_text = "Ihr haus ist Teil der 90% der häuser welche nicht erdbebensicher gebaut sind. Ein erdbeben trifft in Ihrer Region ein und"
+createEventRelativeValue(insurances.earthquake, `${earthquake_text} verursacht leichte Setzungsrisse.`, 20, 0, 5, 10);
+createEventRelativeValue(insurances.earthquake, `${earthquake_text} verursacht stärkere Setzungsrisse.`, 30, 0, 10, 20);
+createEventRelativeValue(insurances.earthquake, `${earthquake_text} Ihr Haus benötigt komplete rennovationen.`, 50, 0, 30, 50);
 
 /*
 versicherung:
@@ -118,12 +129,10 @@ Umgebungsversicherung:
 
 Ergänzungsversicherung:
 
-- Besitzen sie ein altes Gebäude? besteht bei ihnen erhöhte gefahr vor vandalismus / insekten oder anderen Wildtiere?
 
 
 Bruchversicherung:
 
-- Wollen Sie gegen einbrecher geschützt sein? Haben sie viele Verglasungen in ihrem Gebäude?
 
 
 Wasserversicherung:
@@ -134,15 +143,6 @@ Wasserversicherung:
 
 - Eine undichte Leiung hat ihren Boden als auch einige Möbel durchnässt, die behebung des Lecks macht die Wohnung unbewohnbar. -10000 
 
-Erdbebenversicherung:
-
-- Erdbeben sind in der Schweiz die Naturgefahr mit dem grössten Schadenspotenzial, dennoch sind über 90% der Wohnungen in der Schweiz sind nicht nachweislich erdbebensicher gebaut, stört sie das?
-
-- Leichte Setzungsrisse; -20000 
-
-- stärkerer Setzungsriss; - 80000
-
-- erdbeben, komplette rennovation nötig; - 700000
 
 gebäudetechnikversicherung:
 
@@ -152,9 +152,6 @@ gebäudetechnikversicherung:
 
 Solaranlagenversicherung:
 
-- Besitzt ihr Gebäude Solaranlagen und wollen sie 100% versichert auch für ihren entgangenen Strom und folgekosten ?
-
-- Nach Hagel wurden ihre Solaranlage erheblich beschädigt und der entgangene Strom und die Folgekosten betragen - 3000
 
 Immobilien-Rechtsschutzversicherung:
 
