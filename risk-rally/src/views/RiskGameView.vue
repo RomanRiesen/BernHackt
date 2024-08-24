@@ -47,6 +47,7 @@ const events = [
 ]
 
 
+//TODO add actual probabilities, maybe add seperate garden damages back, (even more kinds of damages)
 function createEventAbsoluteValue(insurance, description, occurence_per_year, occurence_increase_per_year, costs_min, costs_max) {
     events.push(
         {
