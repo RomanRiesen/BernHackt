@@ -53,6 +53,12 @@ export default {
         this.start_month = this.start_date.getMonth()
         this.months = this.start_month;
         this.startGame()
+        console.log("ins paid", this.insurances_paid);
+        console.log("ins paid", this.questionnaireAnswers);
+        console.log("ins paid", this.insurances_paid);
+        console.log("ins paid", this.questionnaireAnswers);
+        console.log("ins paid", this.insurances_paid);
+        console.log("ins paid", this.questionnaireAnswers);
 
         Object.keys(this.insurances).forEach(ins_k => {
             let insurance = this.insurances[ins_k]

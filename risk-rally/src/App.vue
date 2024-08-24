@@ -5,7 +5,6 @@ import { RouterLink, RouterView } from "vue-router";
 </script>
 
 <template>
-  <header>
     <img
       alt="GVB logo"
       class="logo"
@@ -13,7 +12,6 @@ import { RouterLink, RouterView } from "vue-router";
       width="125"
       height="125"
     />
-    </header>
 
     <div class="wrapper">
       <RiskGame />
@@ -51,6 +49,15 @@ header {
   left: 50%;
   transform: translateX(-50%); /* Centers it horizontally */
   text-align: center;
+  min-width: 50vw;
+  min-height: 50vh;
+}
+
+.logo {
+  position: absolute;
+  top: 1em;
+  left: 1em;
+  height: 1em;
 }
 
 body {

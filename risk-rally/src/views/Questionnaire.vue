@@ -77,8 +77,8 @@
             <strong>{{ questions[index].text }}:</strong> {{ answer }}
           </li>
         </ul>
-        <button @click="$emit('done', this.answers)" class="continue-button">Weiter zum Interaktiven Teil</button>
         <button @click="restart" class="restart-button">Von Vorne</button>
+        <button @click="$emit('done', {answers: this.answers, questions: this.questions})" class="continue-button">Weiter zum Interaktiven Teil</button>
       </div>
     </div>
   </div>
@@ -224,10 +224,6 @@ export default {
           this.currentIndex++;
         } else {
           this.completed = true; // Mark as completed
-          this.$router.push({
-            path: "/RiskGame",
-            query: { answers: JSON.stringify(this.answers) },
-          });
         }
       }
     },
