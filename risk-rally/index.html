@@ -9,10 +9,22 @@
     <style>
       body {
         background-color: white;
+        color: black; /* Add text color */
         font-family: Arial, sans-serif;
         text-align: center;
         margin: 0;
         padding: 20px;
+        transition:
+          background-color 0.3s,
+          color 0.3s; /* Add smooth transition */
+      }
+
+      /* Dark Mode */
+      @media (prefers-color-scheme: dark) {
+        body {
+          background-color: #121212;
+          color: gray;
+        }
       }
       .question-container,
       .game-container {
@@ -47,7 +59,8 @@
       <!-- Navigation -->
       <nav>
         <router-link to="/">Questionnaire</router-link> |
-        <router-link to="/game">Mini Game</router-link>
+        <router-link to="/game">Mini Game (dev)</router-link> |
+        <router-link to="/RiskGame">Risk Game</router-link>
       </nav>
 
       <!-- Router View -->
@@ -86,7 +99,8 @@
             questions: [
               'What is your age?',
               'What is your profession?',
-              'What is your risk tolerance on a scale from 1 to 10?'
+              'What is your risk tolerance on a scale from 1 to 10?',
+              ''
             ],
             currentIndex: 0,
             answer: '',
@@ -145,10 +159,31 @@
         }
       }
 
+      // Detect and apply dark mode dynamically
+      const applyDarkMode = () => {
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          document.body.style.backgroundColor = '#121212'
+          document.body.style.color = 'white'
+        } else {
+          document.body.style.backgroundColor = 'white'
+          document.body.style.color = 'black'
+        }
+      }
+
+      // Initial check
+      //applyDarkMode()
+
+      // Listen for changes in the preferred color scheme
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyDarkMode)
+
+      import RiskGameView from './src/views/RiskGameView.vue'
+
       // Routes configuration
       const routes = [
         { path: '/', component: Questionnaire },
-        { path: '/game', component: MiniGame }
+        { path: '/game', component: MiniGame },
+        { path: '/RiskGame', component: RiskGameView }
+        //{ path: '/RiskGame', component: }x
       ]
 
       // Create Router
