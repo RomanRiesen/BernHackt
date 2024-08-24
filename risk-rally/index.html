@@ -64,7 +64,7 @@
       </nav>
 
       <!-- Router View -->
-      <router-view></router-view>
+      <router-view />
     </div>
 
     <script>
@@ -99,6 +99,7 @@
             questions: [
               'What is your age?',
               'What is your profession?',
+              'What is your risk tolerance on a scale from 1 to 10?',
               'What is your risk tolerance on a scale from 1 to 10?',
               ''
             ],
@@ -135,12 +136,7 @@
       // Mini Game Component
       const MiniGame = {
         template: `
-          <div class="game-container">
-            <h1>Mini Game</h1>
-            <p>Try your luck! Press the button to see if you win!</p>
-            <button @click="playGame">Play</button>
-            <p v-if="result">{{ result }}</p>
-          </div>
+        <RiskGameView/>
         `,
         data() {
           return {
