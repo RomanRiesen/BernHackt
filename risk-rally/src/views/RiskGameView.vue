@@ -1,8 +1,8 @@
 <script setup>
+import RiskGameEvent from "../components/RiskGameEvent.vue"
 
-this.cash = 100000;
-this.mortgage = 900000;
-this.house_value = 1100000;
+this.current_event = null;
+this.user_state = new UserState(100000, 900000, 1100000)
 this.start_date = new Date();
 this.tick_time = 1000; //nr milliseconds
 this.year = this.start_date.year;
@@ -166,31 +166,74 @@ const feelingPossibleAnswersUninsured = [
 ]
 
 
-const getMoney = () => {this.cash}
-const getMortgatge = () => {this.mortgage}
-const getHouseValue = () => {this.house_value}
-const getWealth = () => {this.cash - this.mortgage + this.house_value}
+const getMoney = () => {this.user_state.cash}
+const getMortgatge = () => {this.user_state.mortgage}
+const getHouseValue = () => {this.user_state.house_value}
+const getWealth = () => {this.user_state.get_wealth()}
+
+
+function lerpRound(l, h, f, round) {
+    return Math.round((l + (h-l) * f)/round)*round;
+}
+
+//takes an event and the user_state and returns a FiredEvent
+function fireEvent(event, user_state) {
+    //event happened now calculate damages
+    const least_amount = 500;
+    let damages = 0;
+    if ("absolute" in event.damages.keys()) {
+        damages = lerpRound(damages.costs_min, damages.costs_max, Math.random(), least_amount);
+    }
+    else {
+        damages = lerpRound(damages.costs_min_percentage, damages.costs_max_percentage, Math.random(), least_amount);
+    }
+    new FiredEvent(event.insurance, event.description, damages);
+
+}
 
 
 const getYearsMonths = () => {`${Math.round(this.months / 12)}Jahre, ${this.months%12} Monate`}
 
 
+class FiredEvent {
+  constructor(insurance, description, actual_damages) {
+    this.insurance = insurance;
+    this.description = description;
+    this.actual_damages = actual_damages;
+  }
+}
+
+class UserState {
+  constructor(cash, mortgage, house_value) {
+    this.cash = cash;
+    this.mortgage = mortgage;
+    this.house_value = house_value;
+  }
+
+  get_wealth() {
+    return this.cash - this.mortgage + this.house_value;
+  }
+}
+
 </script>
 
 <template>
   <main>
-    <div id = "wealth">
-        <span>
-            <div>Dein Vermögen:</div>
-            <div>{{ getWealth }} </div>
-        </span>
+    <div id = "user_state">
+        <div id = "wealth">
+            <span>
+                <div>Dein Vermögen:</div>
+                <div>{{ getWealth }} </div>
+            </span>
+        </div>
+        <div id = "ingame_date">
+            <span>
+                <div>Jahre/Monate:</div>
+                <div> {{ getYearsMonths }} </div>
+            </span>
+        </div>
     </div>
-    <div id = "ingameDate">
-        <span>
-            <div>Jahre/Monate:</div>
-            <div> {{ getYearsMonths }} </div>
-        </span>
-    </div>
+    <RiskGameEvent v-if="this.current_event != null" :fired_event = "fireEvent(this.current_event, this.user_state)"/>
   </main>
 </template>
 
