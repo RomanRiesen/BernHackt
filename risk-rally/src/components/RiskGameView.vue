@@ -244,7 +244,7 @@ export default {
         <div v-if="this.current_event" id="event_information">
             <div>{{ this.current_event?.description }}</div>
             <div>{{ this.current_fired_event?.actual_damages }}</div>
-            <div> {{ this.insurances_paid.has(this.current_fired_event?.insurance.type) ? "Von Ihrer Versicherung gedeckt:" : "Nicht von einer Ihrer Versicherungen gedeckt." }}</div>
+            <div> {{ this.insurances_paid.has(this.current_fired_event?.insurance.type) ? "Von Ihrer Versicherung gedeckt:" : "Nicht von einer Ihrer Versicherungen gedeckt. Wäre gedeckt durch:" }}</div>
             <div>{{ this.current_fired_event?.insurance.name }}</div>
             <button v-if="!this.game_done && this.game_loop_interval === null" @click="this.startGame">Resume</button>
         </div>
