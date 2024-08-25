@@ -224,22 +224,6 @@ export default {
         },
         getYearsMonths() { return `${Math.round(this.years)}.${this.months?.toString().padStart(2, "0")}`; },
         getAnimationFrameNumber() {
-            //if (this.months <= 3) {
-            //    return 37 + this.months % 3;
-            //}
-            //if (this.months > 3 && this.months <= 5 ) {
-            //    return 41;
-            //}
-            //if (this.months > 5 && this.months <= 8 ) {
-            //    return 12;
-            //}
-            //if (this.months > 8 && this.months <= 10 ) {
-            //    return 18;
-            //}
-            //if (this.months > 10 && this.months <= 12 ) {
-            //    return 30;
-            //}
-
             switch(this.months) {
                 case 0: return 36;
                 case 1: return 37;

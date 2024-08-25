@@ -10,8 +10,10 @@ defineProps({
 <template>
   <div class="greetings">
     <h1 class="orange">{{ msg }}</h1>
-    <h2>RiskGame - Ihr Risiko spielerisch Einschätzen</h2>
+    <h2>RiskGame</h2>
+    <h3>Ihr Risiko spielerisch Einschätzen</h3>
   </div>
+  <button @click="$emit('done')">Los!</button>
 </template>
 
 <style scoped>
@@ -34,7 +36,7 @@ h2 {
 @media (min-width: 1024px) {
   .greetings h1,
   .greetings h2 {
-    text-align: left;
+    text-align: center;
   }
 }
 </style>
