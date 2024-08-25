@@ -1,5 +1,6 @@
 # Use the official Node.js image as the base image
-FROM node:18
+FROM node:22 AS dev
+EXPOSE 3000
 
 # Set the working directory inside the container
 WORKDIR /workspace
@@ -11,18 +12,21 @@ RUN apt-get update && \
     
 COPY ./risk-rally .
 
-# Copy package.json and package-lock.json
-WORKDIR /workspace/RiskRally/risk-rally
-
-#COPY package*.json ./
 
 # Install project dependencies
-#RUN npm install 
+RUN npm install 
 
 # Copy the rest of the application code
 
-# Expose port 8080 for the Vue development server
-EXPOSE 8080
 
+FROM dev AS deploy
+
+# docker build -t "riskRally" && docker run -it --entrypoint bash -p 3001:3000 riskRally
+
+EXPOSE 3000
+WORKDIR /workspace
 # Start the Vue development server
-#CMD ["npm", "run", "serve"]
+RUN npm run build
+CMD npx serve -s dist
+
+
