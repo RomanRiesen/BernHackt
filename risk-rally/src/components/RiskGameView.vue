@@ -129,10 +129,8 @@ export default {
                 this.stopGame();
                 //TODO figure out if actually covered
                 //TODO figure out if actually covered
-                //TODO figure out if actually covered
-                //TODO figure out if actually covered
                 console.log(this.current_event.insurance)
-                if (this.current_event.insurance.type in this.insurances_paid)
+                if (this.insurances_paid.has(this.current_event.insurance.type))
                 {
                     this.insurance_statistics[this.current_event.insurance.name].benefits += this.current_fired_event.actual_damages;
                 }

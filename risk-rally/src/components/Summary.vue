@@ -15,7 +15,7 @@
             </thead>
             <tbody>
                 <tr v-for="(data, name) in sortedInsuranceData" :key="name">
-                    <td style="text-align:left;">{{ name }}</td>
+                    <td :class="{'owned_insurance': data.premiums !== 0}" style="text-align:left;">{{ name }}</td>
                     <td>{{ formatNumber(data.premiums) }}</td>
                     <td>{{ formatNumber(data.benefits) }}</td>
                     <td>{{ formatNumber(data.benefits - data.premiums) }}</td>
@@ -50,3 +50,9 @@ export default {
     }
 }
 </script>
+
+<style>
+    .owned_insurance {
+        font-weight: bold;
+    }
+</style>
