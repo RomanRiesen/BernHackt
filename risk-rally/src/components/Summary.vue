@@ -4,7 +4,7 @@
     </h2>
     <div style="display: flex; justify-content: center; flex-direction: column; text-align: end;">
 
-        <table>
+        <table style="border-width: 0pt; border-style: none; padding: 0pt;">
             <thead>
                 <tr>
                     <th style="text-align: left;">Name</th>

@@ -1,5 +1,6 @@
 <script>
 import RiskGameEvent from './RiskGameEvent.vue'
+import SpriteSheet from './SpriteSheet.vue'
 import { UserState, FiredEvent, questions_and_answers_to_insurances } from './UserState.js'
 
 export default {
@@ -9,14 +10,14 @@ export default {
             required: true
         }
     },
-    components: RiskGameEvent,
+    components: { RiskGameEvent, SpriteSheet },
     data() {
         return {
             current_event: null,
             game_loop_interval: null,
             user_state: new UserState(100000, 900000, 1100000),
             start_date: null,
-            tick_time: 100, // nr milliseconds
+            tick_time: 500, // nr milliseconds
             start_year: null,
             years: null, // this.start_date.getYear(),
             months: null, // this.start_date.getMonth(),
@@ -130,8 +131,7 @@ export default {
                 //TODO figure out if actually covered
                 //TODO figure out if actually covered
                 console.log(this.current_event.insurance)
-                if (this.insurances_paid.has(this.current_event.insurance.type))
-                {
+                if (this.insurances_paid.has(this.current_event.insurance.type)) {
                     this.insurance_statistics[this.current_event.insurance.name].benefits += this.current_fired_event.actual_damages;
                 }
             }
@@ -223,6 +223,43 @@ export default {
             return new FiredEvent(event.insurance, event.description, damages)
         },
         getYearsMonths() { return `${Math.round(this.years)}.${this.months?.toString().padStart(2, "0")}`; },
+        getAnimationFrameNumber() {
+            //if (this.months <= 3) {
+            //    return 37 + this.months % 3;
+            //}
+            //if (this.months > 3 && this.months <= 5 ) {
+            //    return 41;
+            //}
+            //if (this.months > 5 && this.months <= 8 ) {
+            //    return 12;
+            //}
+            //if (this.months > 8 && this.months <= 10 ) {
+            //    return 18;
+            //}
+            //if (this.months > 10 && this.months <= 12 ) {
+            //    return 30;
+            //}
+
+            switch(this.months) {
+                case 0: return 36;
+                case 1: return 37;
+                case 2: return 38;
+                case 3: return 39;
+                case 4: return 40;
+                case 5: return 41;
+                case 6: return 42;
+                case 7: return 19;
+                case 8: return 20;
+                case 9: return 26;
+                case 10: return 27;
+                case 11: return 29;
+                case 12: return 32;
+            }
+
+
+
+
+        }
     },
     beforeUnmount() {
         this.stopGame()
@@ -231,21 +268,31 @@ export default {
 </script>
 <template>
     <main>
-        <div id="game_information">
+        <div id="game_information"
+            style="display: flex; flex-direction: row; justify-content: space-between; padding: 10pt;">
             <div id="game_wealth">
-                <div>Dein Vermögen:</div>
+                <div>Ihr Vermögen:</div>
                 <div>{{ this.user_state.get_wealth() }} </div>
             </div>
             <div id="game_date">
-                <div>Jahre/Monate seit Beginn:</div>
-                <div> {{ this.getYearsMonths() }} </div>
+                <div style="display: flex;">
+                    <SpriteSheet :frame="this.getAnimationFrameNumber()"/>
+                    <div>
+                        <div>Jahre/Monate seit Beginn:</div>
+                        <div> {{ this.getYearsMonths() }} </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div v-if="this.current_event" id="event_information">
-            <div>{{ this.current_event?.description }}</div>
-            <div>{{ this.current_fired_event?.actual_damages }}</div>
-            <div> {{ this.insurances_paid.has(this.current_fired_event?.insurance.type) ? "Von Ihrer Versicherung gedeckt:" : "Nicht von einer Ihrer Versicherungen gedeckt. Wäre gedeckt durch:" }}</div>
-            <div>{{ this.current_fired_event?.insurance.name }}</div>
+            <div style="border-style: solid; padding: 10pt;">
+                <div>{{ this.current_event?.description }}</div>
+                <div>Kosten {{ this.current_fired_event?.actual_damages }}.-</div>
+            </div>
+            <div style="padding-top: 10pt;"> {{ this.insurances_paid.has(this.current_fired_event?.insurance.type) ?
+                "Von Ihrer Versicherung gedeckt:" : "Nicht von einer Ihrer Versicherungen gedeckt. Wäre gedeckt durch:"
+                }}</div>
+            <div style="font-weight: bolder;">{{ this.current_fired_event?.insurance.name }}</div>
             <button v-if="!this.game_done && this.game_loop_interval === null" @click="this.startGame">Resume</button>
         </div>
         <button v-if="this.game_done" @click="$emit('done', { insuranceStats: this.insurance_statistics })">View
